@@ -5,8 +5,11 @@ function App() {
   const [inputSearch, seInputSearch] = useState({});
   const [sub, setSub] = useState(false);
   const ApiKey = "27e6dc585b4e91012b40f49699562a2a"; // own unique key found in the OpenWeather account;
-
+  const weatherValue = [];
   // const sevenDayFor = []; // initiated empty array to push temp value from the response data
+  var today = new Date();
+  const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
   const weatherApi = (input) => {
     const urlApi = `https://api.openweathermap.org/data/2.5/forecast?q=${input}&units=metric&appid=${ApiKey}`;
     axios
@@ -15,12 +18,7 @@ function App() {
         console.log(res.data);
         seInputSearch(res.data);
         setSub(false);
-        // for (let i = 0; i < 7; i++) {
-        //   // sevenDayFor.push(res.data.list[i].main.temp_max);
-        //   seInputSearch(i);
-        //   console.log(i);
-        // }
-        // console.log(); // checking the array output in the console
+        console.log(days[today.getDay()]);
       })
       .catch((err) => {
         console.log(err);
@@ -29,12 +27,6 @@ function App() {
   useEffect(() => {
     // return () => {
     //   second
-    // }
-    // if (sub) {
-    //   weatherApi();
-    //   console.log(sevenDayFor);
-    // } else {
-    //   console.log("No city name typed");
     // }
   }, []);
 
@@ -62,17 +54,21 @@ function App() {
 
       <div>
         Hello
-        {/* {inputSearch.length > 0
-          ? inputSearch.map((val, index) => {
-              <div key={index}>{val.list}</div>;
-            })
-          : ""} */}
         {sub ? "loading" : ""}
-        <h1>
-          {/* {isLoading?inputSearch.city.name:{}} */}
-          {inputSearch.city ? inputSearch.city.name : ""}
-        </h1>
-        {/* <h3>{inputSearch.list[1].main?.temp}</h3> */}
+        <h1>{inputSearch.city ? inputSearch.city.name : ""}</h1>
+        <div>
+          {inputSearch.list
+            ? inputSearch.list.slice(0, 7).map((val, index) => {
+                weatherValue.push(val.main.temp);
+              })
+            : ""}
+
+          {weatherValue.length > 0
+            ? weatherValue.map((val, index) => {
+                return <p key={index}> {val}</p>;
+              })
+            : ""}
+        </div>
       </div>
     </>
   );
