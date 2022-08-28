@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import html2canvas from "html2canvas";
 import axios from "axios";
 function App() {
   const [input, setInput] = useState("");
@@ -10,6 +11,9 @@ function App() {
   var today = new Date();
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
+  html2canvas(document.querySelector("#testcanvimg")).then((canvas) => {
+    document.body.appendChild(canvas);
+  });
   const weatherApi = (input) => {
     const urlApi = `https://api.openweathermap.org/data/2.5/forecast?q=${input}&units=metric&appid=${ApiKey}`;
     axios
@@ -52,7 +56,7 @@ function App() {
         <button type="Submit">Search</button>
       </form>
 
-      <div>
+      <div id="testcanvimg">
         Hello world
         {sub ? "loading" : ""}
         <h1>{inputSearch.city ? inputSearch.city.name : ""}</h1>
